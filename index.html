@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nosimpszone — Toolkit</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --noir: #0A0A0A;
+    --rouge: #C0392B;
+    --orange: #D4703A;
+    --teal: #2E9E8F;
+    --purple: #5B4FCF;
+    --gris: #EFEFEF;
+    --gris-mid: #D0D0D0;
+    --gris-dark: #888;
+    --card: #FFFFFF;
+    --border: rgba(0,0,0,0.08);
+    --text: #1A1A1A;
+    --text-mid: #555;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--gris);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--noir);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 2px solid var(--rouge);
+  }
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: 0.05em;
+  }
+  .logo span { color: var(--rouge); }
+  .badge {
+    background: rgba(192,57,43,0.15);
+    border: 1px solid var(--rouge);
+    color: var(--rouge);
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 100px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--noir);
+    padding: 4rem 2rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--rouge), transparent);
+  }
+  .hero-eyebrow {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--rouge);
+    margin-bottom: 1rem;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 900;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+  }
+  .hero p {
+    color: #888;
+    font-size: 1rem;
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* ── NAV TABS ── */
+  .nav-tabs {
+    display: flex;
+    gap: 0;
+    padding: 1.5rem 2rem 0;
+    max-width: 960px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 0.85rem 1rem;
+    background: rgba(255,255,255,0.5);
+    border: 1px solid var(--border);
+    border-bottom: none;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-mid);
+    transition: all 0.2s;
+    letter-spacing: 0.02em;
+    border-radius: 10px 10px 0 0;
+    margin-right: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .tab-btn:last-child { margin-right: 0; }
+  .tab-btn:hover { background: rgba(255,255,255,0.85); color: var(--text); }
+  .tab-btn.active {
+    background: var(--card);
+    color: var(--text);
+    border-top: 2px solid var(--rouge);
+    padding-top: calc(0.85rem - 1px);
+  }
+
+  /* ── MAIN ── */
+  .main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 2rem 4rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .panel {
+    display: none;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 16px 16px;
+    padding: 2.5rem;
+    animation: fadeIn 0.3s ease;
+  }
+  .panel.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── TYPOGRAPHY ── */
+  .panel-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.4rem;
+  }
+  .panel-sub {
+    color: var(--text-mid);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+  }
+  .field-label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-mid);
+    margin-bottom: 0.5rem;
+  }
+
+  /* ── INPUTS ── */
+  textarea, input[type="text"], input[type="password"], select {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border: 1.5px solid var(--gris-mid);
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    color: var(--text);
+    background: var(--gris);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    resize: none;
+    outline: none;
+  }
+  textarea:focus, input:focus, select:focus {
+    border-color: var(--rouge);
+    box-shadow: 0 0 0 3px rgba(192,57,43,0.1);
+    background: #fff;
+  }
+  .input-group { margin-bottom: 1.25rem; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem; }
+
+  /* ── BUTTONS ── */
+  .btn-primary {
+    width: 100%;
+    padding: 1rem;
+    background: var(--rouge);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 1rem;
+  }
+  .btn-primary:hover { background: #a93226; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(192,57,43,0.3); }
+  .btn-primary:active { transform: translateY(0); }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  .btn-secondary {
+    padding: 0.6rem 1.2rem;
+    background: transparent;
+    color: var(--rouge);
+    border: 1.5px solid var(--rouge);
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { background: var(--rouge); color: #fff; }
+
+  /* ── API BANNER ── */
+  .api-banner {
+    background: #FFF8F0;
+    border: 1.5px solid #F5C6A0;
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .api-banner-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 2px; }
+  .api-banner-text { font-size: 0.85rem; color: #7A4A1A; line-height: 1.5; flex: 1; }
+  .api-banner-text a { color: var(--rouge); text-decoration: underline; }
+  .api-key-row { display: flex; gap: 8px; align-items: center; margin-top: 0.5rem; }
+  .api-key-row input {
+    flex: 1;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82rem;
+    padding: 0.6rem 0.85rem;
+    margin-bottom: 0;
+  }
+
+  /* ── CHIPS ── */
+  .chip-group { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 1.25rem; }
+  .chip {
+    padding: 5px 14px;
+    border-radius: 100px;
+    border: 1.5px solid var(--gris-mid);
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: #fff;
+    color: var(--text-mid);
+  }
+  .chip:hover { border-color: var(--rouge); color: var(--rouge); }
+  .chip.selected { background: var(--rouge); border-color: var(--rouge); color: #fff; }
+
+  /* ── LOADER ── */
+  .loader { display: inline-flex; gap: 4px; align-items: center; }
+  .loader span {
+    width: 6px; height: 6px;
+    background: #fff;
+    border-radius: 50%;
+    animation: bounce 1s infinite;
+  }
+  .loader span:nth-child(2) { animation-delay: 0.15s; }
+  .loader span:nth-child(3) { animation-delay: 0.3s; }
+  @keyframes bounce {
+    0%,80%,100% { transform: scale(0.6); opacity: 0.4; }
+    40% { transform: scale(1); opacity: 1; }
+  }
+
+  /* ── RESPONSE BLOCK ── */
+  .response-block {
+    background: var(--noir);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+    animation: fadeIn 0.4s ease;
+  }
+  .rb-tag {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 0.75rem;
+  }
+  .rb-content {
+    color: #E8E8E8;
+    font-size: 0.95rem;
+    line-height: 1.75;
+    white-space: pre-wrap;
+  }
+  .rb-why {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    font-size: 0.82rem;
+    color: #888;
+    line-height: 1.6;
+  }
+
+  /* ── DIVIDER ── */
+  .divider { height: 1px; background: var(--border); margin: 2rem 0; }
+
+  /* ── QUIZ ── */
+  .quiz-step { display: none; }
+  .quiz-step.active { display: block; animation: fadeIn 0.3s ease; }
+  .quiz-progress-text { font-size: 0.78rem; color: var(--text-mid); font-weight: 500; margin-bottom: 0.5rem; }
+  .progress-bar-wrap { background: var(--gris-mid); border-radius: 100px; height: 8px; margin-bottom: 1.5rem; overflow: hidden; }
+  .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--rouge), var(--orange)); border-radius: 100px; transition: width 0.5s ease; }
+
+  .option-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 1.25rem 0; }
+  .option-btn {
+    padding: 1rem;
+    background: var(--gris);
+    border: 2px solid transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    color: var(--text);
+    text-align: left;
+    transition: all 0.2s;
+    line-height: 1.4;
+  }
+  .option-btn:hover { border-color: var(--rouge); background: #fff; }
+  .option-btn.selected { border-color: var(--rouge); background: rgba(192,57,43,0.06); color: var(--rouge); font-weight: 500; }
+
+  /* ── PLAN STEPS ── */
+  .plan-step {
+    display: flex;
+    gap: 16px;
+    padding: 1.25rem;
+    background: var(--gris);
+    border-radius: 12px;
+    margin-bottom: 10px;
+    align-items: flex-start;
+    border-left: 3px solid var(--rouge);
+    transition: all 0.2s;
+  }
+  .plan-step:hover { background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  .step-num {
+    width: 32px; height: 32px;
+    background: var(--rouge);
+    color: #fff;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.82rem; font-weight: 700;
+    flex-shrink: 0;
+  }
+  .step-content h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 4px; }
+  .step-content p { font-size: 0.85rem; color: var(--text-mid); line-height: 1.5; }
+
+  /* ── TRACKER ── */
+  .dose-week { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 1.5rem; }
+  .dose-day {
+    background: var(--gris);
+    border-radius: 12px;
+    padding: 1.25rem 1rem;
+    text-align: center;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    user-select: none;
+  }
+  .dose-day:hover { border-color: var(--gris-mid); }
+  .dose-day.checked { border-color: currentColor; background: #fff; }
+  .dose-day .day-letter { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 900; line-height: 1; margin-bottom: 0.25rem; }
+  .dose-day .day-name { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-mid); margin-bottom: 0.5rem; }
+  .dose-day .day-action { font-size: 0.75rem; color: var(--text-mid); line-height: 1.4; }
+  .dose-day .check-mark { position: absolute; top: 8px; right: 8px; font-size: 1rem; display: none; }
+  .dose-day.checked .check-mark { display: block; }
+  .dose-D { color: #C0392B; }
+  .dose-O { color: #D4703A; }
+  .dose-S { color: #2E9E8F; }
+  .dose-E { color: #5B4FCF; }
+
+  /* ── SCORE CARDS ── */
+  .score-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 1.5rem; }
+  .score-card { background: var(--gris); border-radius: 12px; padding: 1.25rem; text-align: center; }
+  .score-num { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 900; line-height: 1; margin-bottom: 0.25rem; }
+  .score-label { font-size: 0.75rem; color: var(--text-mid); font-weight: 500; }
+
+  /* ── FOOTER ── */
+  footer { text-align: center; padding: 2rem; font-size: 0.78rem; color: var(--gris-dark); }
+  footer strong { color: var(--rouge); }
+
+  /* ── MOBILE ── */
+  @media (max-width: 640px) {
+    .grid-2 { grid-template-columns: 1fr; }
+    .dose-week { grid-template-columns: repeat(2,1fr); }
+    .score-grid { grid-template-columns: repeat(2,1fr); }
+    .option-grid { grid-template-columns: 1fr; }
+    .panel { padding: 1.5rem; }
+    .tab-btn .tab-text { display: none; }
+    .tab-btn { padding: 0.75rem; }
+    .nav-tabs { padding: 1rem 1rem 0; }
+    .main { padding: 0 1rem 3rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">NOSIMPSZONE<span>.</span></div>
+  <div class="badge">Toolkit Client</div>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">Tes outils de passage à l'action</div>
+  <h1>L'arsenal de<br>l'homme attractif</h1>
+  <p>Trois outils propulsés par l'IA pour transformer ta connaissance en comportements concrets.</p>
+</div>
+
+<!-- API KEY -->
+<div class="main" style="padding-top:1.5rem; padding-bottom:0;">
+  <div class="api-banner">
+    <div class="api-banner-icon">🔑</div>
+    <div class="api-banner-text">
+      <strong>Clé API Anthropic requise</strong> — Obtiens ta clé gratuite sur
+      <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a>
+      <div class="api-key-row">
+        <input type="password" id="globalApiKey" placeholder="sk-ant-api03-..." />
+        <button class="btn-secondary" onclick="saveApiKey()">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="main" style="padding-top:0; padding-bottom:0;">
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="showTab('simulator', this)">
+      <span class="tab-icon">⚡</span>
+      <span class="tab-text">Simulateur de Tests</span>
+    </button>
+    <button class="tab-btn" onclick="showTab('plan', this)">
+      <span class="tab-icon">📅</span>
+      <span class="tab-text">Plan D.O.S.E. Perso</span>
+    </button>
+    <button class="tab-btn" onclick="showTab('tracker', this)">
+      <span class="tab-icon">✅</span>
+      <span class="tab-text">Tracker Hebdo</span>
+    </button>
+  </div>
+</div>
+
+<!-- PANELS -->
+<div class="main" style="padding-top:0;">
+
+  <!-- ══ PANEL 1 — SIMULATEUR ══ -->
+  <div id="panel-simulator" class="panel active">
+    <div class="panel-title">Simulateur de Tests Féminins</div>
+    <div class="panel-sub">Colle le message qu'elle t'a envoyé. L'IA analyse le type de test et te donne la réponse stable — avec l'explication psychologique.</div>
+
+    <div class="input-group">
+      <label class="field-label">Son message</label>
+      <textarea id="sim-message" rows="3" placeholder="Ex: « Tu ne me motives pas vraiment... » ou « J'ai plein de mecs qui m'écrivent en ce moment »"></textarea>
+    </div>
+
+    <div class="input-group">
+      <label class="field-label">Contexte de votre relation</label>
+      <div class="chip-group" id="sim-context-chips">
+        <div class="chip selected" data-val="première semaine de discussion">1ère semaine</div>
+        <div class="chip" data-val="1 mois de discussion">1 mois</div>
+        <div class="chip" data-val="en couple">En couple</div>
+        <div class="chip" data-val="après un premier rendez-vous">Après un RDV</div>
+        <div class="chip" data-val="après un silence de plusieurs jours">Après un silence</div>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label class="field-label">Ton humeur actuelle</label>
+      <div class="chip-group" id="sim-mood-chips">
+        <div class="chip selected" data-val="calme et posé">Calme 😌</div>
+        <div class="chip" data-val="légèrement agacé">Agacé 😤</div>
+        <div class="chip" data-val="confiant">Confiant 💪</div>
+        <div class="chip" data-val="incertain">Incertain 🤔</div>
+      </div>
+    </div>
+
+    <button class="btn-primary" id="sim-btn" onclick="runSimulator()">
+      <span id="sim-btn-text">⚡ Analyser et générer la réponse stable</span>
+      <span id="sim-loader" class="loader" style="display:none"><span></span><span></span><span></span></span>
+    </button>
+
+    <div id="sim-result" class="response-block" style="display:none;">
+      <div class="rb-tag">🔍 Type de test détecté</div>
+      <div id="sim-test-type" style="color:var(--orange); font-weight:600; font-size:1rem; margin-bottom:1rem;"></div>
+      <div class="rb-tag">✓ Réponse de l'homme stable</div>
+      <div id="sim-response" class="rb-content"></div>
+      <div class="rb-why" id="sim-why"></div>
+    </div>
+
+    <div class="divider"></div>
+    <div style="font-size:0.82rem; color:var(--text-mid); line-height:1.6;">
+      <strong>💡 Exemples :</strong> « Tu parles beaucoup quand même. » · « Mes amis disent que je devrais pas te parler. » · « J'ai un mec qui veut me payer un voyage. »
+    </div>
+  </div>
+
+  <!-- ══ PANEL 2 — PLAN D.O.S.E. ══ -->
+  <div id="panel-plan" class="panel">
+    <div class="panel-title">Plan D.O.S.E. Personnalisé</div>
+    <div class="panel-sub">6 questions rapides → ton plan de la semaine avec des actions concrètes adaptées à ta situation exacte.</div>
+
+    <div id="quiz-step-1" class="quiz-step active">
+      <div class="quiz-progress-text">Question 1 / 6</div>
+      <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:16%"></div></div>
+      <h3 style="font-size:1.1rem; font-weight:600; margin-bottom:1.25rem;">Où en es-tu dans ta situation actuelle ?</h3>
+      <div class="option-grid">
+        <button class="option-btn" data-q="1" data-val="célibataire, je cherche à rencontrer quelqu'un">Célibataire — je veux rencontrer</button>
+        <button class="option-btn" data-q="1" data-val="en discussion avec une fille depuis peu">En discussion depuis peu</button>
+        <button class="option-btn" data-q="1" data-val="en couple depuis plusieurs mois">En couple établi</button>
+        <button class="option-btn" data-q="1" data-val="situation compliquée, elle souffle le chaud et le froid">Situation compliquée</button>
+      </div>
+    </div>
+
+    <div id="quiz-step-2" class="quiz-step">
+      <div class="quiz-progress-text">Question 2 / 6</div>
+      <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:33%"></div></div>
+      <h3 style="font-size:1.1rem; font-weight:600; margin-bottom:1.25rem;">Quelle est ta principale difficulté ?</h3>
+      <div class="option-grid">
+        <button class="option-btn" data-q="2" data-val="je manque de confiance pour approcher">Manque de confiance</button>
+        <button class="option-btn" data-q="2" data-val="les conversations se refroidissent trop vite">Conversations qui meurent</button>
+        <button class="option-btn" data-q="2" data-val="je réagis mal quand elle me teste ou m'ignore">Réagir aux tests</button>
+        <button class="option-btn" data-q="2" data-val="je sur-investis émotionnellement trop vite">Sur-investissement émotionnel</button>
+      </div>
+    </div>
+
+    <div id="quiz-step-3" class="quiz-step">
+      <div class="quiz-progress-text">Question 3 / 6</div>
+      <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:50%"></div></div>
+      <h3 style="font-size:1.1rem; font-weight:600; margin-bottom:1.25rem;">Comment est ton lifestyle en ce moment ?</h3>
+      <div class="option-grid">
+        <button class="option-btn" data-q="3" data-val="très chargé, peu de temps libre">Très chargé</button>
+        <button class="option-btn" data-q="3" data-val="équilibré avec du temps pour mes projets">Équilibré</button>
+        <button class="option-btn" data-q="3" data-val="beaucoup de temps libre">Beaucoup de temps libre</button>
+        <button class="option-btn" data-q="3" data-val="en transition, je construis quelque chose de nouveau">En transition</button>
+      </div>
+    </div>
+
+    <div id="quiz-step-4" class="quiz-step">
+      <div class="quiz-progress-text">Question 4 / 6</div>
+      <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:66%"></div></div>
+      <h3 style="font-size:1.1rem; font-weight:600; margin-bottom:1.25rem;">Quelle hormone D.O.S.E. te manque le plus ?</h3>
+      <div class="option-grid">
+        <button class="option-btn" data-q="4" data-val="Dopamine — mes interactions sont trop prévisibles">D — Dopamine (trop prévisible)</button>
+        <button class="option-btn" data-q="4" data-val="Ocytocine — mes connexions restent en surface">O — Ocytocine (trop superficiel)</button>
+        <button class="option-btn" data-q="4" data-val="Sérotonine — je ne dégage pas assez de statut">S — Sérotonine (statut faible)</button>
+        <button class="option-btn" data-q="4" data-val="Endorphines — mes interactions manquent de fun">E — Endorphines (trop sérieux)</button>
+      </div>
+    </div>
+
+    <div id="quiz-step-5" class="quiz-step">
+      <div class="quiz-progress-text">Question 5 / 6</div>
+      <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:83%"></div></div>
+      <h3 style="font-size:1.1rem; font-weight:600; margin-bottom:1.25rem;">Ton objectif prioritaire cette semaine ?</h3>
+      <div class="option-grid">
+        <button class="option-btn" data-q="5" data-val="créer plus d'attraction et de désir">Créer plus d'attraction</button>
+        <button class="option-btn" data-q="5" data-val="approfondir la connexion émotionnelle">Approfondir la connexion</button>
+        <button class="option-btn" data-q="5" data-val="regagner son intérêt après un refroidissement">Regagner son intérêt</button>
+        <button class="option-btn" data-q="5" data-val="maintenir la stabilité émotionnelle face à ses tests">Rester stable face aux tests</button>
+      </div>
+    </div>
+
+    <div id="quiz-step-6" class="quiz-step">
+      <div class="quiz-progress-text">Question 6 / 6</div>
+      <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:100%"></div></div>
+      <h3 style="font-size:1.1rem; font-weight:600; margin-bottom:1rem;">Quelque chose à préciser sur ta situation ?</h3>
+      <div class="input-group">
+        <textarea id="q6-detail" rows="3" placeholder="Ex: Elle m'a ghosté 3 jours puis m'a réécrit... ou On se voit vendredi pour la 2ème fois..."></textarea>
+      </div>
+      <button class="btn-primary" id="plan-btn" onclick="runPlan()">
+        <span id="plan-btn-text">📅 Générer mon plan D.O.S.E. personnalisé</span>
+        <span id="plan-loader" class="loader" style="display:none"><span></span><span></span><span></span></span>
+      </button>
+    </div>
+
+    <div id="plan-result" style="display:none; margin-top:1.5rem; animation: fadeIn 0.4s ease;">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.25rem;">
+        <div style="font-family:'Playfair Display',serif; font-size:1.3rem; font-weight:700;">Ton plan de la semaine</div>
+        <button class="btn-secondary" onclick="resetPlan()">Recommencer</button>
+      </div>
+      <div id="plan-content"></div>
+    </div>
+  </div>
+
+  <!-- ══ PANEL 3 — TRACKER ══ -->
+  <div id="panel-tracker" class="panel">
+    <div class="panel-title">Tracker D.O.S.E. Hebdomadaire</div>
+    <div class="panel-sub">Coche les hormones que tu as activées cette semaine. L'IA analyse ton profil et te donne un feedback personnalisé.</div>
+
+    <div class="dose-week">
+      <div class="dose-day dose-D" id="day-D" onclick="toggleDay('D')">
+        <div class="check-mark">✅</div>
+        <div class="day-letter">D</div>
+        <div class="day-name">Dopamine</div>
+        <div class="day-action">Surprise · Imprévu · Nouveauté</div>
+      </div>
+      <div class="dose-day dose-O" id="day-O" onclick="toggleDay('O')">
+        <div class="check-mark">✅</div>
+        <div class="day-letter">O</div>
+        <div class="day-name">Ocytocine</div>
+        <div class="day-action">Connexion · Profondeur · Vulnérabilité</div>
+      </div>
+      <div class="dose-day dose-S" id="day-S" onclick="toggleDay('S')">
+        <div class="check-mark">✅</div>
+        <div class="day-letter">S</div>
+        <div class="day-name">Sérotonine</div>
+        <div class="day-action">Statut · Valoriser · Être respecté</div>
+      </div>
+      <div class="dose-day dose-E" id="day-E" onclick="toggleDay('E')">
+        <div class="check-mark">✅</div>
+        <div class="day-letter">E</div>
+        <div class="day-name">Endorphines</div>
+        <div class="day-action">Rire · Jeu · Légèreté</div>
+      </div>
+    </div>
+
+    <div class="score-grid">
+      <div class="score-card">
+        <div class="score-num" id="tracker-score" style="color:var(--rouge)">0</div>
+        <div class="score-label">Hormones activées</div>
+      </div>
+      <div class="score-card">
+        <div class="score-num" id="tracker-pct" style="color:var(--teal)">0%</div>
+        <div class="score-label">Score D.O.S.E.</div>
+      </div>
+      <div class="score-card">
+        <div class="score-num" id="tracker-streak" style="color:var(--orange)">0</div>
+        <div class="score-label">Semaines consécutives</div>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label class="field-label">Note de la semaine (optionnel)</label>
+      <textarea id="tracker-note" rows="2" placeholder="Ex: J'ai créé la surprise lundi mais la connexion émotionnelle était absente cette semaine..."></textarea>
+    </div>
+
+    <button class="btn-primary" id="tracker-btn" onclick="runTracker()">
+      <span id="tracker-btn-text">🧠 Obtenir mon feedback D.O.S.E.</span>
+      <span id="tracker-loader" class="loader" style="display:none"><span></span><span></span><span></span></span>
+    </button>
+
+    <div id="tracker-result" class="response-block" style="display:none; margin-top:1.5rem;">
+      <div class="rb-tag">📊 Analyse de ta semaine</div>
+      <div id="tracker-feedback" class="rb-content"></div>
+    </div>
+
+    <div class="divider"></div>
+    <div style="font-size:0.85rem; color:var(--text-mid); line-height:1.6;">
+      <strong>Objectif :</strong> Activer les 4 hormones chaque semaine. Un score 4/4 pendant 4 semaines consécutives = transformation profonde du comportement.
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<footer>
+  Propulsé par <strong>Nosimpszone</strong> × Claude AI · Tes données ne sont jamais stockées.
+</footer>
+
+<script>
+// ─── STATE ───────────────────────────────────────────────────
+let apiKey = localStorage.getItem('nsz_apikey') || '';
+const quizAnswers = {};
+const trackerState = { D:false, O:false, S:false, E:false };
+let trackerStreak = parseInt(localStorage.getItem('nsz_streak') || '0');
+
+// ─── INIT ────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  if (apiKey) document.getElementById('globalApiKey').value = apiKey;
+  document.getElementById('tracker-streak').textContent = trackerStreak;
+  setupChips('sim-context-chips');
+  setupChips('sim-mood-chips');
+  document.querySelectorAll('.option-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const q = this.dataset.q;
+      document.querySelectorAll(`[data-q="${q}"]`).forEach(b => b.classList.remove('selected'));
+      this.classList.add('selected');
+      quizAnswers['q' + q] = this.dataset.val;
+      setTimeout(() => nextQuizStep(parseInt(q)), 280);
+    });
+  });
+});
+
+// ─── API KEY ─────────────────────────────────────────────────
+function saveApiKey() {
+  apiKey = document.getElementById('globalApiKey').value.trim();
+  localStorage.setItem('nsz_apikey', apiKey);
+  const btn = event.currentTarget;
+  btn.textContent = '✓ Enregistré';
+  btn.style.background = 'var(--teal)';
+  btn.style.color = '#fff';
+  setTimeout(() => { btn.textContent = 'Enregistrer'; btn.style.background = ''; btn.style.color = ''; }, 2000);
+}
+
+// ─── TABS ────────────────────────────────────────────────────
+function showTab(name, el) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  el.classList.add('active');
+}
+
+// ─── CHIPS ───────────────────────────────────────────────────
+function setupChips(groupId) {
+  const group = document.getElementById(groupId);
+  if (!group) return;
+  group.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', function() {
+      group.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+      this.classList.add('selected');
+    });
+  });
+}
+function getSelectedChip(groupId) {
+  const chip = document.querySelector('#' + groupId + ' .chip.selected');
+  return chip ? chip.dataset.val : '';
+}
+
+// ─── CLAUDE API — via proxy Vercel ───────────────────────────
+async function callClaude(prompt) {
+  if (!apiKey) {
+    alert('⚠️ Ajoute ta clé API Anthropic en haut de la page.');
+    return null;
+  }
+  try {
+    const res = await fetch('/api/claude', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt, apiKey })
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      alert('Erreur API : ' + (err.error?.message || 'Statut ' + res.status));
+      return null;
+    }
+    const data = await res.json();
+    return data.content?.[0]?.text || '';
+  } catch(e) {
+    alert('Erreur réseau : ' + e.message);
+    return null;
+  }
+}
+
+// ─── SIMULATOR ───────────────────────────────────────────────
+async function runSimulator() {
+  const message = document.getElementById('sim-message').value.trim();
+  if (!message) { alert('Colle le message à analyser.'); return; }
+  const context = getSelectedChip('sim-context-chips');
+  const mood = getSelectedChip('sim-mood-chips');
+
+  setLoading('sim', true);
+
+  const prompt = `Tu es un coach en psychologie masculine et séduction, expert des dynamiques relationnelles.
+
+Un homme reçoit ce message d'une femme : "${message}"
+Contexte : ${context}
+Humeur de l'homme : ${mood}
+
+Réponds UNIQUEMENT en JSON valide, sans markdown, sans backticks :
+{
+  "type": "Nom du type de test (ex: Test de jalousie, Test de valeur, Test d'indépendance, Test émotionnel, Test de disponibilité, Test de limites)",
+  "explication": "En 1-2 phrases : pourquoi elle envoie ce message et ce qu'elle mesure inconsciemment.",
+  "reponse_stable": "La réponse exacte que l'homme stable enverrait. Naturelle, en français. Maximum 2-3 phrases courtes.",
+  "a_ne_pas_faire": "Ce que l'homme instable ferait (1 phrase courte).",
+  "pourquoi": "En 2-3 phrases : l'explication psychologique de pourquoi cette réponse fonctionne."
+}`;
+
+  const raw = await callClaude(prompt);
+  setLoading('sim', false);
+  if (!raw) return;
+
+  try {
+    const json = JSON.parse(raw.replace(/```json|```/g, '').trim());
+    document.getElementById('sim-test-type').textContent = json.type;
+    document.getElementById('sim-response').innerHTML =
+      '<div style="margin-bottom:0.75rem;"><strong style="color:#aaa;font-size:0.8rem;">Message à envoyer :</strong><br>' + escHtml(json.reponse_stable) + '</div>' +
+      '<div style="color:#E85A4F; font-size:0.85rem;"><strong>❌ À éviter :</strong> ' + escHtml(json.a_ne_pas_faire) + '</div>';
+    document.getElementById('sim-why').innerHTML =
+      '<strong style="color:#888;">🧠 Pourquoi ça fonctionne :</strong> ' + escHtml(json.pourquoi) +
+      '<br><br><em style="color:#666;">' + escHtml(json.explication) + '</em>';
+    document.getElementById('sim-result').style.display = 'block';
+  } catch(e) {
+    document.getElementById('sim-test-type').textContent = 'Analyse';
+    document.getElementById('sim-response').textContent = raw;
+    document.getElementById('sim-why').textContent = '';
+    document.getElementById('sim-result').style.display = 'block';
+  }
+}
+
+// ─── QUIZ ────────────────────────────────────────────────────
+function nextQuizStep(current) {
+  if (current < 5) {
+    document.getElementById('quiz-step-' + current).classList.remove('active');
+    document.getElementById('quiz-step-' + (current + 1)).classList.add('active');
+  }
+}
+
+function resetPlan() {
+  document.getElementById('plan-result').style.display = 'none';
+  document.querySelectorAll('.quiz-step').forEach(s => s.classList.remove('active'));
+  document.getElementById('quiz-step-1').classList.add('active');
+  Object.keys(quizAnswers).forEach(k => delete quizAnswers[k]);
+  document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+  document.getElementById('q6-detail').value = '';
+}
+
+// ─── PLAN ────────────────────────────────────────────────────
+async function runPlan() {
+  const detail = document.getElementById('q6-detail').value.trim();
+  setLoading('plan', true);
+
+  const prompt = `Tu es un coach en séduction masculine et développement personnel, expert du système D.O.S.E.
+
+Profil de l'homme :
+- Situation : ${quizAnswers.q1 || 'non précisé'}
+- Difficulté : ${quizAnswers.q2 || 'non précisé'}
+- Lifestyle : ${quizAnswers.q3 || 'non précisé'}
+- Hormone manquante : ${quizAnswers.q4 || 'non précisé'}
+- Objectif : ${quizAnswers.q5 || 'non précisé'}
+- Contexte additionnel : ${detail || 'aucun'}
+
+Génère un plan D.O.S.E. personnalisé pour la semaine. Réponds UNIQUEMENT en JSON valide, sans markdown, sans backticks :
+{
+  "profil": "Nom de son profil en 3-4 mots max",
+  "diagnostic": "2-3 phrases de diagnostic honnête et direct.",
+  "conseil_semaine": "Un conseil prioritaire brutal et honnête. 2 phrases max.",
+  "a_eviter": "La chose principale à éviter cette semaine. 1 phrase.",
+  "plan": [
+    {"jour": "Lundi", "hormone": "D", "action": "Action concrète et précise.", "exemple": "Exemple exact de message ou comportement."},
+    {"jour": "Mardi", "hormone": "O", "action": "...", "exemple": "..."},
+    {"jour": "Mercredi", "hormone": "S", "action": "...", "exemple": "..."},
+    {"jour": "Jeudi", "hormone": "E", "action": "...", "exemple": "..."},
+    {"jour": "Vendredi", "hormone": "D", "action": "...", "exemple": "..."},
+    {"jour": "Samedi", "hormone": "O", "action": "...", "exemple": "..."},
+    {"jour": "Dimanche", "hormone": "Repos", "action": "Action de développement personnel.", "exemple": "..."}
+  ]
+}`;
+
+  const raw = await callClaude(prompt);
+  setLoading('plan', false);
+  if (!raw) return;
+
+  try {
+    const json = JSON.parse(raw.replace(/```json|```/g, '').trim());
+    const hColors = { D:'#C0392B', O:'#D4703A', S:'#2E9E8F', E:'#5B4FCF', Repos:'#888' };
+
+    let html = `
+      <div style="background:var(--noir);border-radius:12px;padding:1.25rem 1.5rem;margin-bottom:1rem;">
+        <div style="font-size:0.7rem;color:var(--rouge);font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.5rem;">Ton profil</div>
+        <div style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:#fff;margin-bottom:0.75rem;">${escHtml(json.profil)}</div>
+        <div style="color:#aaa;font-size:0.9rem;line-height:1.6;">${escHtml(json.diagnostic)}</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem;">
+        <div style="background:#FFF5F5;border:1.5px solid #FFC5C0;border-radius:10px;padding:1rem;">
+          <div style="font-size:0.7rem;font-weight:700;color:var(--rouge);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem;">⚡ Priorité semaine</div>
+          <div style="font-size:0.9rem;font-weight:500;line-height:1.5;">${escHtml(json.conseil_semaine)}</div>
+        </div>
+        <div style="background:#FEF9F5;border:1.5px solid #FFD5B8;border-radius:10px;padding:1rem;">
+          <div style="font-size:0.7rem;font-weight:700;color:var(--orange);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.4rem;">🚫 À éviter</div>
+          <div style="font-size:0.9rem;font-weight:500;line-height:1.5;">${escHtml(json.a_eviter)}</div>
+        </div>
+      </div>
+      <div style="font-size:0.8rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-mid);margin-bottom:0.75rem;">Plan jour par jour</div>`;
+
+    json.plan.forEach((day, i) => {
+      const color = hColors[day.hormone] || '#888';
+      html += `
+        <div class="plan-step" style="border-left-color:${color}">
+          <div class="step-num" style="background:${color}">${i+1}</div>
+          <div class="step-content">
+            <h4>${escHtml(day.jour)} <span style="color:${color};font-size:0.75rem;font-weight:600;margin-left:6px;">${escHtml(day.hormone)}</span></h4>
+            <p>${escHtml(day.action)}</p>
+            <div style="margin-top:6px;padding:8px 12px;background:rgba(0,0,0,0.04);border-radius:6px;font-size:0.8rem;color:var(--text-mid);font-style:italic;">
+              💬 ${escHtml(day.exemple)}
+            </div>
+          </div>
+        </div>`;
+    });
+
+    document.getElementById('plan-content').innerHTML = html;
+    document.getElementById('quiz-step-6').classList.remove('active');
+    document.getElementById('plan-result').style.display = 'block';
+  } catch(e) {
+    document.getElementById('plan-content').innerHTML =
+      '<div class="response-block"><div class="rb-content">' + escHtml(raw) + '</div></div>';
+    document.getElementById('quiz-step-6').classList.remove('active');
+    document.getElementById('plan-result').style.display = 'block';
+  }
+}
+
+// ─── TRACKER ─────────────────────────────────────────────────
+function toggleDay(letter) {
+  trackerState[letter] = !trackerState[letter];
+  document.getElementById('day-' + letter).classList.toggle('checked', trackerState[letter]);
+  updateTrackerUI();
+}
+
+function updateTrackerUI() {
+  const checked = Object.values(trackerState).filter(Boolean).length;
+  document.getElementById('tracker-score').textContent = checked;
+  document.getElementById('tracker-pct').textContent = Math.round(checked / 4 * 100) + '%';
+}
+
+async function runTracker() {
+  const names = { D:'Dopamine', O:'Ocytocine', S:'Sérotonine', E:'Endorphines' };
+  const checked = Object.entries(trackerState).filter(([,v]) => v).map(([k]) => names[k]);
+  const missing = Object.entries(trackerState).filter(([,v]) => !v).map(([k]) => names[k]);
+  const note = document.getElementById('tracker-note').value.trim();
+
+  setLoading('tracker', true);
+
+  const prompt = `Tu es un coach en séduction masculine expert du système D.O.S.E.
+
+Bilan de la semaine :
+- Hormones activées (${checked.length}/4) : ${checked.join(', ') || 'aucune'}
+- Hormones manquantes : ${missing.join(', ') || 'aucune'}
+- Note personnelle : ${note || 'aucune'}
+
+Donne un feedback direct, honnête et motivant en français. 3-4 paragraphes courts :
+1. Ce qui a bien été fait et pourquoi c'est bien
+2. Ce qui manque et l'impact concret sur l'attraction
+3. Une action concrète et précise pour la semaine prochaine
+4. Une phrase de conclusion motivante
+
+Sois direct. Parle à la 2ème personne du singulier. Pas de listes à puces.`;
+
+  const result = await callClaude(prompt);
+  setLoading('tracker', false);
+  if (!result) return;
+
+  if (checked.length === 4) {
+    trackerStreak++;
+    localStorage.setItem('nsz_streak', trackerStreak);
+    document.getElementById('tracker-streak').textContent = trackerStreak;
+  }
+
+  document.getElementById('tracker-feedback').textContent = result;
+  document.getElementById('tracker-result').style.display = 'block';
+}
+
+// ─── UTILS ───────────────────────────────────────────────────
+function setLoading(tool, isLoading) {
+  const btn    = document.getElementById(tool + '-btn');
+  const text   = document.getElementById(tool + '-btn-text');
+  const loader = document.getElementById(tool + '-loader');
+  btn.disabled = isLoading;
+  text.style.display   = isLoading ? 'none' : 'inline';
+  loader.style.display = isLoading ? 'inline-flex' : 'none';
+}
+
+function escHtml(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/\n/g, '<br>');
+}
+</script>
+</body>
+</html>
